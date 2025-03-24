@@ -61,6 +61,8 @@ def build_ann_model(input_dim, learning_rate=0.001, activation='relu',
     model.add(Dense(units_per_layer, input_dim=input_dim, activation=activation))
     for _ in range(hidden_layers - 1):
         model.add(Dense(units_per_layer, activation=activation))
+    
+    # Lớp đầu ra: 1 nút, hàm sigmoid
     model.add(Dense(1, activation='sigmoid'))
 
     optimizer = Adam(learning_rate=learning_rate) # Thuật toán tối ưu
@@ -167,6 +169,7 @@ for i, params in enumerate(grid):
     model.fit(X_train, y_train, epochs=1000, batch_size=32, verbose=0, validation_split=0.1)
     y_pred = (model.predict(X_test) > 0.5).astype("int32")
     
+    # Tiêu chí
     acc = accuracy_score(y_test, y_pred)
     prec = precision_score(y_test, y_pred)
     rec = recall_score(y_test, y_pred)
