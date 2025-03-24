@@ -1,0 +1,24 @@
+enable
+configure terminal
+
+crypto isakmp policy 10
+encryption aes
+hash sha
+authentication pre-share
+group 2
+exit
+
+crypto isakmp key R1R3 address 10.10.10.2
+crypto ipsec transform-set TRANS_SET esp-aes esp-sha-hmac
+
+crypto map VPN_R1R3 10 ipsec-isakmp
+set peer 10.10.10.2
+set transform-set TRANS_SET
+match address 100
+
+access-list 100 permit ip 192.168.3.0 0.0.0.255 192.168.1.0 0.0.0.255
+
+interface g0/0/2
+crypto map VPN_R1R3
+exit
+do write
