@@ -1,3 +1,6 @@
+.vscode
+.env
+
 # Bỏ qua file Word
 *.doc
 *.docx
