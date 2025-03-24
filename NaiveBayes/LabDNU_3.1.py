@@ -15,4 +15,4 @@ data = \
 ]
 data_input=['Sunny','Cool', 'High', 'Weak', None]
 
-print(f"NaiveBayes_predict: {NaiveBayes.use.NaiveBayes_predict(data, data_input)}")
+print(f"NaiveBayes_predict   :     {NaiveBayes.use.NaiveBayes_predict(data, data_input)}")
