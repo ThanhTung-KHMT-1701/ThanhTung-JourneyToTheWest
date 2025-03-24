@@ -24,12 +24,14 @@ class CrossEntropy:
 
     @classmethod
     def f(cls, A, Y):
+        A = np.clip(A, cls.EPSILON, 1. - cls.EPSILON) # Xử lý lỗi đối với việc sử dụng Log()
         N = Y.shape[0]
 
-        return 1/N * np.sum(-Y * np.log(A + CrossEntropy.EPSILON))
+        return 1/N * np.sum(-Y * np.log(A))
 
     @classmethod
     def d(cls, A, Y):
+        A = np.clip(A, cls.EPSILON, 1. - cls.EPSILON) # Xử lý lỗi đối với việc sử dụng Log()
         N = Y.shape[0]
 
         return 1/N * (-Y / A)

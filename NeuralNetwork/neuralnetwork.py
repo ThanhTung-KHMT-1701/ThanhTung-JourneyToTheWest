@@ -1,5 +1,4 @@
 import numpy                as np
-import cupy                 as cp
 
 import display_output       as do
 import activation_function  as af
@@ -140,12 +139,21 @@ class NeuralNetwork:
         # khi xử lý hết các lô hay không?
         CER = +float('inf')
 
+        # Lưu lại lịch sử để mai sau vẽ biểu đồ sự biến thiên của hàm mất mát
+        LossHistory = []
+
         for _ in range(epoch):
             # Theo dõi sự biến thiên của hàm lỗi qua mỗi lần lặp
-            if _ == epoch:
-            # if _ != 0:
+            if _ != 0:
                 print("Epoch: {:>6d} | NeuralNetwork.error() : {:.24f} | {}".format(_, self.error(), CER > self.error()))
                 CER = self.error()
+
+                LossHistory.append(CER)
+
+            # Trộn lại dữ liệu mỗi epoch
+            perm = np.random.permutation(T)
+            XX = XX[perm]
+            YY = YY[perm]
 
             L = 0
             R = 0
@@ -175,7 +183,10 @@ class NeuralNetwork:
                         Lc = self.Layer[K]
                         Lc.forward()
 
-                    AG = AG + self.C.d(FinalLayer.A, self.Y) * FinalLayer.F.d(FinalLayer.Z)
+                    if isinstance(FinalLayer.F, af.Softmax) and isinstance(self.C, lf.CrossEntropy):
+                        AG = AG + self.C.d_softmax(FinalLayer.A, self.Y) * FinalLayer.F.d(FinalLayer.Z)
+                    else:
+                        AG = AG + self.C.d(FinalLayer.A, self.Y) * FinalLayer.F.d(FinalLayer.Z)
                 
                 # Tính giá trị trung bình của ma trận Gradient-Descent (tại lớp cuối)
                 AG = AG / batch_size
@@ -196,6 +207,9 @@ class NeuralNetwork:
 
                 L = R + 1
                 R = L
+        
+        return LossHistory
+
     
     def test(self, XX, YY):
         # T là số bản ghi trong khối dữ liệu kiểm tra
