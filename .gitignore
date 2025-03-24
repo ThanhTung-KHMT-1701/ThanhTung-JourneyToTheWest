@@ -1,3 +1,11 @@
+# Bỏ qua file Word
+*.doc
+*.docx
+
+# Bỏ qua file PowerPoint
+*.ppt
+*.pptx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
