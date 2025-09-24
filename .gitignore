@@ -2,6 +2,9 @@
 .env
 .github
 
+# Bỏ qua tất các file và folder có chứa từ "LuuThanhTung"
+*LuuThanhTung*
+
 # Bỏ qua file Word
 *.doc
 *.docx
